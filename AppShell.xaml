@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="LetyAccesoriosApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:LetyAccesoriosApp"
+    xmlns:views="clr-namespace:LetyAccesoriosApp.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Lety Accesorios">
+
+    <TabBar x:Name="MainTabBar">
+        <Tab Title="Inicio" Route="MainPage">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Title="Insumos" Route="InsumosPage">
+            <ShellContent ContentTemplate="{DataTemplate views:StockPage}" />
+        </Tab>
+        <Tab Title="Productos" Route="ProductosPage">
+            <ShellContent ContentTemplate="{DataTemplate views:StockPage}" />
+        </Tab>
+        <Tab Title="Ventas" Route="VentasPage">
+            <ShellContent ContentTemplate="{DataTemplate views:VentasPage}" />
+        </Tab>
+        <Tab Title="Resumen" Route="ResumenPage">
+            <ShellContent ContentTemplate="{DataTemplate views:VentasPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

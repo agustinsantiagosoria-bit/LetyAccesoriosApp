@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LetyAccesoriosApp": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

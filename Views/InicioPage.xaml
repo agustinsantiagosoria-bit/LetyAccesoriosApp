@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LetyAccesoriosApp.Views.InicioPage"
+             BackgroundColor="#FFF8F6"
+             Title="Inicio">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Saludo y Encabezado -->
+            <Label Text="¡Hola Lety!" FontSize="28" FontAttributes="Bold" TextColor="#333333" />
+            <Label Text="Tus creaciones" FontSize="16" TextColor="#888888" Margin="0,-15,0,0" />
+
+            <!-- Grid de Tarjetas Superiores -->
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                <!-- Tarjeta Insumos (Azul claro) -->
+                <Frame Grid.Column="0" BackgroundColor="#E3EDF7" CornerRadius="16" Padding="15" HasShadow="False" BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="🧵 Mis Insumos" FontSize="14" FontAttributes="Bold" TextColor="#2B4C6F" />
+                        <Label Text="235" FontSize="26" FontAttributes="Bold" TextColor="#1F3247" />
+                        <Label Text="items total" FontSize="12" TextColor="#5A7594" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tarjeta Productos (Rosa claro) -->
+                <Frame Grid.Column="1" BackgroundColor="#FCE4EC" CornerRadius="16" Padding="15" HasShadow="False" BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="🌸 Mis Productos" FontSize="14" FontAttributes="Bold" TextColor="#880E4F" />
+                        <Label Text="78" FontSize="26" FontAttributes="Bold" TextColor="#4A148C" />
+                        <Label Text="creados" FontSize="12" TextColor="#880E4F" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Tarjeta Ventas de Hoy (Naranja claro) -->
+            <Frame BackgroundColor="#FFE0B2" CornerRadius="16" Padding="15" HasShadow="False" BorderColor="Transparent">
+                <Grid ColumnDefinitions="*, Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                        <Label Text="💰 Ventas de Hoy" FontSize="14" FontAttributes="Bold" TextColor="#E65100" />
+                        <Label Text="$450" FontSize="28" FontAttributes="Bold" TextColor="#BF360C" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Accesos Rápidos -->
+            <Label Text="Acciones Rápidas" FontSize="18" FontAttributes="Bold" TextColor="#333333" Margin="0,10,0,0" />
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                <Button Grid.Column="0" Text="Ir a Productos" BackgroundColor="#F48FB1" TextColor="White" FontAttributes="Bold" CornerRadius="12" Clicked="OnIrAProductosClicked" />
+                <Button Grid.Column="1" Text="Ir a Ventas" BackgroundColor="#FFB74D" TextColor="White" FontAttributes="Bold" CornerRadius="12" Clicked="OnIrAVentasClicked" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

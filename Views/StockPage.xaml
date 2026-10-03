@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LetyAccesoriosApp.ViewModels"
+             x:Class="LetyAccesoriosApp.Views.StockPage"
+             BackgroundColor="#FFF8F6"
+             Title="Gestión de Stock">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="15" RowSpacing="10">
+
+        <Label Grid.Row="0" Text="Mis Productos" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#333333" />
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Productos}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5" Padding="12" CornerRadius="12" BorderColor="#F48FB1" HasShadow="False" BackgroundColor="White">
+                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                            <StackLayout Grid.Column="0" Grid.Row="0">
+                                <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" TextColor="#333333" />
+                                <Label Text="{Binding Precio, StringFormat='Precio: ${0:F2}'}" FontSize="14" TextColor="Gray" />
+                            </StackLayout>
+
+                            <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                                <Label Text="{Binding StockActual, StringFormat='Stock: {0}'}" FontSize="14" FontAttributes="Bold" TextColor="#D81B60" />
+                            </StackLayout>
+
+                            <StackLayout Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal" Spacing="8" VerticalOptions="Center">
+                                <Button Text="✏️ Stock" 
+                                        BackgroundColor="#FFB74D" 
+                                        TextColor="White" 
+                                        FontAttributes="Bold"
+                                        CornerRadius="8"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:StockViewModel}}, Path=ModificarStockCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                <Button Text="🛒 Vender" 
+                                        BackgroundColor="#2196F3" 
+                                        TextColor="White" 
+                                        FontAttributes="Bold"
+                                        CornerRadius="8"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:StockViewModel}}, Path=RegistrarVentaCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="2" 
+                Text="+ Nuevo Producto" 
+                BackgroundColor="#F48FB1" 
+                TextColor="White" 
+                FontAttributes="Bold" 
+                FontSize="16"
+                CornerRadius="12"
+                HeightRequest="50"
+                Clicked="OnAgregarProductoClicked" />
+    </Grid>
+
+</ContentPage>

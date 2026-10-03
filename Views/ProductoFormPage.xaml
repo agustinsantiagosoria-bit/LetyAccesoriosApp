@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LetyAccesoriosApp.Views.ProductoFormPage"
+             BackgroundColor="#FFF8F6"
+             Title="Nuevo Producto">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+            <Label Text="Agregar Nuevo Producto" 
+                   FontSize="22" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="#333333" />
+
+            <Entry x:Name="NombreEntry" Placeholder="Nombre del producto" />
+            <Entry x:Name="PrecioEntry" Placeholder="Precio" Keyboard="Numeric" />
+            <Entry x:Name="StockActualEntry" Placeholder="Stock inicial" Keyboard="Numeric" />
+            <Entry x:Name="StockMinimoEntry" Placeholder="Stock mínimo" Keyboard="Numeric" />
+
+            <Button Text="Guardar Producto" 
+                    Clicked="OnGuardarClicked" 
+                    BackgroundColor="#F48FB1" 
+                    TextColor="White" 
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="48"
+                    Margin="0,10,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

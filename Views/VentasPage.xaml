@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LetyAccesoriosApp.Views.VentasPage"
+             Title="Resumen de Ventas">
+
+    <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*, *, *" ColumnSpacing="8">
+            <Button Grid.Column="0" Text="Hoy" x:Name="BtnHoy" Clicked="OnFiltroHoyClicked" BackgroundColor="#2196F3" TextColor="White" />
+            <Button Grid.Column="1" Text="Semana" x:Name="BtnSemana" Clicked="OnFiltroSemanaClicked" BackgroundColor="#E0E0E0" TextColor="Black" />
+            <Button Grid.Column="2" Text="Mes" x:Name="BtnMes" Clicked="OnFiltroMesClicked" BackgroundColor="#E0E0E0" TextColor="Black" />
+        </Grid>
+
+        <Frame Grid.Row="1" BackgroundColor="#4CAF50" CornerRadius="12" Padding="20" HasShadow="True">
+            <StackLayout HorizontalOptions="Center" Spacing="5">
+                <Label Text="Total Ganado" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                <Label x:Name="TotalRecaudadoLabel" Text="$0.00" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" />
+            </StackLayout>
+        </Frame>
+
+        <CollectionView Grid.Row="2" x:Name="VentasCollectionView">
+            <CollectionView.EmptyView>
+                <Label Text="No hay ventas registradas en este período." HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,4" Padding="12" CornerRadius="8" BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <StackLayout Grid.Column="0">
+                                <Label Text="{Binding NombreProducto}" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="{Binding CantidadVendida, StringFormat='Unidades: {0}'}" FontSize="13" TextColor="Gray" />
+                                <Label Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="11" TextColor="Gray" />
+                            </StackLayout>
+
+                            <Label Grid.Column="1" 
+                                   Text="{Binding TotalVenta, StringFormat='${0:F2}'}" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2E7D32" 
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

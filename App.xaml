@@ -1,0 +1,28 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LetyAccesoriosApp.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- PALETA DE COLORES PASTEL PARA LETY ACCESORIOS -->
+            <Color x:Key="PageBackground">#FFF5F7</Color>
+            <Color x:Key="CardBackground">#FFFFFF</Color>
+            
+            <Color x:Key="TextPrimary">#4A3E3D</Color>
+            <Color x:Key="TextSecondary">#8A7A78</Color>
+            
+            <Color x:Key="InsumosBlue">#E3F2FD</Color>
+            <Color x:Key="ProductosPink">#FCE4EC</Color>
+            <Color x:Key="VentasOrange">#FFF3E0</Color>
+            <Color x:Key="ResumenPurple">#F3E5F5</Color>
+
+            <Color x:Key="AlertPillBg">#FFEBEE</Color>
+            <Color x:Key="AlertPillText">#C62828</Color>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
