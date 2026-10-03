@@ -7,7 +7,6 @@ namespace LetyAccesoriosApp.Views
     {
         private readonly DatabaseService _databaseService;
 
-        // Constructor corregido con el tipo DatabaseService
         public VentasPage(DatabaseService databaseService)
         {
             InitializeComponent();
@@ -17,9 +16,23 @@ namespace LetyAccesoriosApp.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // Actualiza la lista de ventas cargadas en la interfaz de usuario
             var historial = await _databaseService.ObtenerHistorialVentasAsync();
-            // HistorialCollectionView.ItemsSource = historial; // Descomenta si usas este control en tu XAML
+        }
+
+        private void OnFiltroHoyClicked(object sender, EventArgs e)
+        {
+            // Lógica diaria
+        }
+
+        private void OnFiltroSemanaClicked(object sender, EventArgs e)
+        {
+            // Lógica semanal
+        }
+
+        // SE AGREGÓ ESTA FUNCIÓN PARA RESOLVER EL ERROR DEL BOTÓN MENSUAL
+        private void OnFiltroMesClicked(object sender, EventArgs e)
+        {
+            // Lógica mensual
         }
 
         private async void OnCancelarVentaClicked(object sender, EventArgs e)
@@ -27,7 +40,7 @@ namespace LetyAccesoriosApp.Views
             if (sender is Button boton && boton.CommandParameter is int ventaId)
             {
                 await _databaseService.CancelarVentaAsync(ventaId);
-                OnAppearing(); // Refresca la UI al anular
+                OnAppearing(); 
             }
         }
     }

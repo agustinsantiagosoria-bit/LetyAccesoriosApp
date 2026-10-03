@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+932c48319f7ee916b960051c62d9d68be6473d67")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+f4bd937b12bbf1f22b6ce2156c796035dae51523")]
 [assembly: System.Reflection.AssemblyProductAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

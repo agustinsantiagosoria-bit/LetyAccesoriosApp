@@ -31,12 +31,6 @@ build_metadata.AdditionalFiles.ManifestResourceName = LetyAccesoriosApp.AppShell
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/agust/LetyAccesoriosApp/MainPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LetyAccesoriosApp.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
-
 [C:/Users/agust/LetyAccesoriosApp/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LetyAccesoriosApp.Resources.Styles.Colors.xaml
@@ -60,6 +54,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LetyAccesoriosApp.Views.InsumosPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\InsumosPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\InsumosPage.xaml
+
+[C:/Users/agust/LetyAccesoriosApp/Views/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LetyAccesoriosApp.Views.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\MainPage.xaml
 
 [C:/Users/agust/LetyAccesoriosApp/Views/PerfilPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

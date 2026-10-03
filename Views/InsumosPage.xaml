@@ -1,74 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://microsoft.com"
-             xmlns:x="http://microsoft.com"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LetyAccesoriosApp.Views.InsumosPage"
              BackgroundColor="#FFF3EB"
              Title="Gestión de Insumos">
 
     <ScrollView>
-        <!-- Grid principal con x:Name configurado correctamente -->
-        <Grid x:Name="MainContainer" Padding="20" RowSpacing="20" ColumnSpacing="20">
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Registrar Sucursal/Tienda" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
+            <Entry Placeholder="Nombre de la tienda (ej. Once, Centro)" Text="{Binding NombreNuevaSucursal}" BackgroundColor="White"/>
+            <Button Text="Agregar Tienda" Command="{Binding GuardarSucursalCommand}" BackgroundColor="#FCE4C8" TextColor="Black"/>
+
+            <Label Text="Cargar Nuevo Insumo" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
+            <Entry Placeholder="Ej. Cordón Elástico" Text="{Binding NombreInsumo}" BackgroundColor="White"/>
+            <Entry Placeholder="Stock Inicial" Keyboard="Numeric" Text="{Binding StockInsumo}" BackgroundColor="White"/>
+            <Entry Placeholder="Precio" Keyboard="Numeric" Text="{Binding PrecioInsumo}" BackgroundColor="White"/>
             
-            <!-- FORMULARIO DE CARGA (INSUMOS Y SUCURSALES) -->
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0" x:Name="FormPanel" Spacing="15">
-                
-                <!-- Tarjeta para crear Sucursales -->
-                <Border BackgroundColor="#FCECE3" StrokeShape="RoundRectangle 15" Padding="15">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Registrar Sucursal/Tienda" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
-                        <Entry Placeholder="Nombre de la tienda (ej. Once, Centro)" Text="{Binding NombreNuevaSucursal}" BackgroundColor="White"/>
-                        <Button Text="Agregar Tienda" Command="{Binding GuardarSucursalCommand}" BackgroundColor="#FCE4C8" TextColor="Black"/>
-                    </VerticalStackLayout>
-                </Border>
+            <Picker Title="Seleccionar Sucursal" 
+                    ItemsSource="{Binding Sucursales}" 
+                    ItemDisplayBinding="{Binding Nombre}"
+                    SelectedItem="{Binding SucursalSeleccionada}"
+                    BackgroundColor="White"/>
 
-                <!-- Tarjeta para agregar Insumos -->
-                <Border BackgroundColor="#D4E4F7" StrokeShape="RoundRectangle 15" Padding="15">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Cargar Nuevo Insumo" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
-                        
-                        <Label Text="Nombre del Material:"/>
-                        <Entry Placeholder="Ej. Cordón Elástico Rosa 2m" Text="{Binding NombreInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="Cantidad / Stock Inicial:"/>
-                        <Entry Placeholder="Ej. 10" Keyboard="Numeric" Text="{Binding StockInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="Precio de Compra:"/>
-                        <Entry Placeholder="Ej. 150" Keyboard="Numeric" Text="{Binding PrecioInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="¿Dónde lo compraste?:"/>
-                        <Picker Title="Seleccionar Sucursal" 
-                                ItemsSource="{Binding Sucursales}" 
-                                ItemDisplayBinding="{Binding Nombre}"
-                                SelectedItem="{Binding SucursalSeleccionada}"
-                                BackgroundColor="White"/>
-
-                        <Button Text="Guardar Insumo" Command="{Binding GuardarInsumoCommand}" BackgroundColor="#B3D1F2" TextColor="Black" Margin="0,10,0,0"/>
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-
-            <!-- TABLA / LISTADO DE MATERIALES GUARDADOS -->
-            <VerticalStackLayout Grid.Row="1" Grid.Column="0" x:Name="ListPanel" Spacing="10">
-                <Label Text="Inventario Actual e Insumos" FontAttributes="Bold" FontSize="18" TextColor="#2D2D2D"/>
-                
-                <CollectionView ItemsSource="{Binding Insumos}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Margin="0,5" Padding="15">
-                                <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="10">
-                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="14"/>
-                                        <Label Text="{Binding NombreSucursal, StringFormat='Comprado en: {0}'}" FontSize="12" TextColor="Gray"/>
-                                    </VerticalStackLayout>
-                                    <Label Grid.Column="1" Text="{Binding Stock, StringFormat='Cant: {0}'}" VerticalOptions="Center" FontAttributes="Bold"/>
-                                    <Label Grid.Column="2" Text="{Binding PrecioCompra, StringFormat='${0}'}" VerticalOptions="Center" TextColor="Green" Margin="10,0,0,0"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-
-        </Grid>
+            <Button Text="Guardar Insumo" Command="{Binding GuardarInsumoCommand}" BackgroundColor="#B3D1F2" TextColor="Black"/>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

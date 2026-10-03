@@ -1,19 +1,16 @@
 ﻿using LetyAccesoriosApp.Views;
+using LetyAccesoriosApp.Data;
 
-namespace LetyAccesoriosApp
+namespace LetyAccesoriosApp;
+
+public partial class App : Application
 {
-    public partial class AppShell : Shell
+    // Modificamos el constructor para recibir la base de datos e inyectarla en la página de inicio
+    public App(DatabaseService databaseService)
     {
-        public AppShell()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            // Registro de rutas para la navegación de la Shell
-            Routing.RegisterRoute("InsumosPage", typeof(StockPage));
-            Routing.RegisterRoute("ProductosPage", typeof(StockPage));
-            Routing.RegisterRoute("VentasPage", typeof(VentasPage));
-            Routing.RegisterRoute("ResumenPage", typeof(VentasPage));
-            Routing.RegisterRoute("ProductoFormPage", typeof(ProductoFormPage));
-        }
+        // Establecemos que la página inicial real dentro de la navegación sea InsumosPage
+        MainPage = new NavigationPage(new InsumosPage(databaseService));
     }
 }
