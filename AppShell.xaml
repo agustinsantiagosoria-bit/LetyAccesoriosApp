@@ -8,12 +8,9 @@
     Title="Lety Accesorios">
 
     <!-- Navegación directa y segura vinculando correctamente el prefijo views -->
-    <ShellContent Title="Insumos" Route="InsumosPage">
-        <ShellContent.ContentTemplate>
-            <DataTemplate x:DataType="views:InsumosPage">
-                <views:InsumosPage />
-            </DataTemplate>
-        </ShellContent.ContentTemplate>
-    </ShellContent>
+   <ShellContent
+        Title="Insumos"
+        ContentTemplate="{DataTemplate views:InsumosPage}"
+        Route="InsumosPage" />
 
 </Shell>

@@ -1,23 +1,24 @@
 using LetyAccesoriosApp.ViewModels;
 using LetyAccesoriosApp.Data;
 
-namespace LetyAccesoriosApp.Views;
-
-public partial class InsumosPage : ContentPage
+namespace LetyAccesoriosApp.Views
 {
-    private readonly InsumosViewModel _viewModel;
-
-    public InsumosPage(DatabaseService databaseService)
+    public partial class InsumosPage : ContentPage
     {
-        InitializeComponent();
-        
-        _viewModel = new InsumosViewModel(databaseService);
-        BindingContext = _viewModel;
-    }
+        private readonly InsumosViewModel _viewModel;
 
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await _viewModel.CargarDatosAsync();
+        public InsumosPage(DatabaseService databaseService)
+        {
+            InitializeComponent();
+            
+            _viewModel = new InsumosViewModel(databaseService);
+            BindingContext = _viewModel;
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await _viewModel.CargarDatosAsync();
+        }
     }
 }
