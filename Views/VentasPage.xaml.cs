@@ -1,5 +1,6 @@
 using LetyAccesoriosApp.Data;
 using LetyAccesoriosApp.Models;
+using System.Linq;
 
 namespace LetyAccesoriosApp.Views
 {
@@ -7,40 +8,28 @@ namespace LetyAccesoriosApp.Views
     {
         private readonly DatabaseService _databaseService;
 
+        // El constructor recibe el inyector de dependencias de la base de datos
         public VentasPage(DatabaseService databaseService)
         {
             InitializeComponent();
             _databaseService = databaseService;
         }
-
+        // Recarga el historial de ventas automáticamente al entrar a la pantalla
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            var historial = await _databaseService.ObtenerHistorialVentasAsync();
-        }
 
-        private void OnFiltroHoyClicked(object sender, EventArgs e)
-        {
-            // Lógica diaria
-        }
-
-        private void OnFiltroSemanaClicked(object sender, EventArgs e)
-        {
-            // Lógica semanal
-        }
-
-        // SE AGREGÓ ESTA FUNCIÓN PARA RESOLVER EL ERROR DEL BOTÓN MENSUAL
-        private void OnFiltroMesClicked(object sender, EventArgs e)
-        {
-            // Lógica mensual
-        }
-
-        private async void OnCancelarVentaClicked(object sender, EventArgs e)
-        {
-            if (sender is Button boton && boton.CommandParameter is int ventaId)
+            try
             {
-                await _databaseService.CancelarVentaAsync(ventaId);
-                OnAppearing(); 
+                // 1. Consultamos el historial de tickets registrados en SQLite
+                var listaVentas = await _databaseService.ObtenerHistorialVentasAsync();
+
+                // 2. Vinculamos el resultado directamente con el listado XAML mediante un objeto anónimo
+                BindingContext = new { HistorialVentas = listaVentas };
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[VENTAS ERROR]: {ex.Message}");
             }
         }
     }

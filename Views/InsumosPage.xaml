@@ -1,74 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://microsoft.com"
-             xmlns:x="http://microsoft.com"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LetyAccesoriosApp.Views.InsumosPage"
              BackgroundColor="#FFF3EB"
-             Title="Gestión de Insumos">
+             Title="Inventario Insumos">
 
-    <ScrollView>
-        <!-- Agregamos x:Name para poder controlar la grilla desde el código C# -->
-        <Grid x:Name="MainContainer" Padding="20" RowSpacing="20" ColumnSpacing="20">
-            
-            <!-- COLUMNA/PANEL 1: FORMULARIOS DE CARGA -->
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0" x:Name="FormPanel" Spacing="15">
-                
-                <!-- Tarjeta para crear Sucursales -->
-                <Border BackgroundColor="#FCECE3" StrokeShape="RoundRectangle 15" Padding="15">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Registrar Sucursal/Tienda" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
-                        <Entry Placeholder="Nombre de la tienda (ej. Once, Centro)" Text="{Binding NombreNuevaSucursal}" BackgroundColor="White"/>
-                        <Button Text="Agregar Tienda" Command="{Binding GuardarSucursalCommand}" BackgroundColor="#FCE4C8" TextColor="Black"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Tarjeta para agregar Insumos -->
-                <Border BackgroundColor="#D4E4F7" StrokeShape="RoundRectangle 15" Padding="15">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Cargar Nuevo Insumo" FontAttributes="Bold" FontSize="16" TextColor="#2D2D2D"/>
-                        
-                        <Label Text="Nombre del Material:"/>
-                        <Entry Placeholder="Ej. Cordón Elástico" Text="{Binding NombreInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="Cantidad / Stock Inicial:"/>
-                        <Entry Placeholder="Ej. 10" Keyboard="Numeric" Text="{Binding StockInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="Precio de Compra:"/>
-                        <Entry Placeholder="Ej. 150" Keyboard="Numeric" Text="{Binding PrecioInsumo}" BackgroundColor="White"/>
-
-                        <Label Text="¿Dónde lo compraste?:"/>
-                        <Picker Title="Seleccionar Sucursal" 
-                                ItemsSource="{Binding Sucursales}" 
-                                ItemDisplayBinding="{Binding Nombre}"
-                                SelectedItem="{Binding SucursalSeleccionada}"
-                                BackgroundColor="White"/>
-
-                        <Button Text="Guardar Insumo" Command="{Binding GuardarInsumoCommand}" BackgroundColor="#B3D1F2" TextColor="Black" Margin="0,10,0,0"/>
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-
-            <!-- COLUMNA/PANEL 2: LISTADO DE MATERIALES GUARDADOS -->
-            <VerticalStackLayout Grid.Row="1" Grid.Column="0" x:Name="ListPanel" Spacing="10">
-                <Label Text="Inventario Actual de Insumos" FontAttributes="Bold" FontSize="18" TextColor="#2D2D2D"/>
-                
-                <CollectionView ItemsSource="{Binding Insumos}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Margin="0,5" Padding="15">
-                                <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="10">
-                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="14"/>
-                                        <Label Text="{Binding NombreSucursal, StringFormat='Comprado en: {0}'}" FontSize="12" TextColor="Gray"/>
-                                    </VerticalStackLayout>
-                                    <Label Grid.Column="1" Text="{Binding Stock, StringFormat='Cant: {0}'}" VerticalOptions="Center" FontAttributes="Bold"/>
-                                    <Label Grid.Column="2" Text="{Binding PrecioCompra, StringFormat='${0}'}" VerticalOptions="Center" TextColor="Green" Margin="10,0,0,0"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-
+    <!-- Contenedor general en rejilla para fijar los encabezados y permitir el scroll en los datos -->
+    <Grid RowDefinitions="Auto, Auto, *" Padding="20" RowSpacing="15">
+        
+        <!-- ELEMENTO 1: ENCABEZADO Y FILTROS SUPERIORES (FOTO 2) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Center">
+            <Label Grid.Column="0" Text="Insumos / Inventario - Gestión 🧵" FontSize="20" FontAttributes="Bold" TextColor="#2D2D2D"/>
+            <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                <Entry Placeholder="🔍 Filtrar Insumos..." WidthRequest="220" BackgroundColor="White"/>
+                <Picker Title="Categoría" WidthRequest="130" BackgroundColor="White"/>
+            </HorizontalStackLayout>
         </Grid>
-    </ScrollView>
+
+        <!-- ELEMENTO 2: ENCABEZADOS FIJOS DE LA TABLA ESTILO EXCEL REFINADO -->
+        <Grid Grid.Row="1" BackgroundColor="#FCECE3" Padding="12,10" ColumnDefinitions="2.5*, *, *, 1.8*, Auto" Margin="0,5,0,0">
+            <Label Grid.Column="0" Text="Insumo Name" FontAttributes="Bold" TextColor="#444444"/>
+            <Label Grid.Column="1" Text="Precio (Costo)" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#444444"/>
+            <Label Grid.Column="2" Text="Stock" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#444444"/>
+            <Label Grid.Column="3" Text="Mejor Distribuidora" FontAttributes="Bold" TextColor="#444444"/>
+            <Label Grid.Column="4" Text="Acciones" FontAttributes="Bold" WidthRequest="90" HorizontalOptions="Center" TextColor="#444444"/>
+        </Grid>
+        <!-- ELEMENTO 3: FILAS DINÁMICAS DE LA TABLA ESTILO EXCEL CONECTADAS A SQLITE -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Insumos}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 0" Padding="12,10" Margin="0,1">
+                        <Grid ColumnDefinitions="2.5*, *, *, 1.8*, Auto">
+                            <!-- Nombre del Material -->
+                            <Label Grid.Column="0" Text="{Binding Nombre}" VerticalOptions="Center" FontAttributes="Bold" TextColor="#2D2D2D"/>
+                            
+                            <!-- Costo Unitario -->
+                            <Label Grid.Column="1" Text="{Binding PrecioCompra, StringFormat='${0:F2}/u'}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#2D2D2D"/>
+                            
+                            <!-- Cantidad en Inventario -->
+                            <Label Grid.Column="2" Text="{Binding Stock, StringFormat='{0}u'}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#2D2D2D"/>
+                            
+                            <!-- Distribuidor o Tienda de Suministro -->
+                            <Label Grid.Column="3" Text="{Binding NombreSucursal}" VerticalOptions="Center" TextColor="DimGray" FontSize="13"/>
+                            
+                            <!-- Botones Rápidos de Acción (Modificar / Eliminar) -->
+                            <HorizontalStackLayout Grid.Column="4" Spacing="6" WidthRequest="90" HorizontalOptions="Center">
+                                <Button Text="✏️" FontSize="12" WidthRequest="40" HeightRequest="32" Padding="0" BackgroundColor="#E2F0D9" TextColor="Black"/>
+                                <Button Text="🗑️" FontSize="12" WidthRequest="40" HeightRequest="32" Padding="0" BackgroundColor="#FCECE3" TextColor="DarkRed"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

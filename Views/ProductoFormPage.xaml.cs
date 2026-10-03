@@ -1,35 +1,36 @@
 using LetyAccesoriosApp.Data;
 using LetyAccesoriosApp.Models;
+using System.Linq;
 
 namespace LetyAccesoriosApp.Views
 {
     public partial class ProductoFormPage : ContentPage
     {
         private readonly DatabaseService _databaseService;
-        private ProductoVenta _productoActual;
 
-        // El constructor ahora recibe el DatabaseService correcto
+        // El constructor recibe el servicio único de base de datos local mediante inyección
         public ProductoFormPage(DatabaseService databaseService)
         {
             InitializeComponent();
             _databaseService = databaseService;
-            _productoActual = new ProductoVenta();
         }
-
+        // Recarga el catálogo de productos automáticamente al entrar a la pantalla
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // Lógica para cargar insumos disponibles al abrir el formulario
-        }
 
-        private async void OnGuardarClicked(object sender, EventArgs e)
-        {
-            // Ejemplo de guardado integrado con el servicio nuevo
-            if (string.IsNullOrWhiteSpace(_productoActual.Nombre)) return;
+            try
+            {
+                // 1. Consultamos la lista de accesorios guardados en SQLite
+                var listaProductos = await _databaseService.ObtenerProductsAsync();
 
-            var recetaVacia = new List<ProductoInsumo>();
-            await _databaseService.GuardarProductoConRecetaAsync(_productoActual, recetaVacia);
-            await Navigation.PopAsync();
+                // 2. Vinculamos el resultado directamente con la grilla XAML mediante un objeto anónimo
+                BindingContext = new { Productos = listaProductos };
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[CATALOGO ERROR]: {ex.Message}");
+            }
         }
     }
 }

@@ -2,150 +2,141 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LetyAccesoriosApp.Views.MainPage"
-             BackgroundColor="{StaticResource PageBackground}">
+             BackgroundColor="#FFF3EB"
+             Title="Resumen General">
 
-    <Grid RowDefinitions="Auto, *, Auto">
-        
-        <!-- ENCABEZADO -->
-        <VerticalStackLayout Grid.Row="0" Margin="0,20,0,10" HorizontalOptions="Center">
-            <Label Text="Lety ♡" 
-                   FontSize="32" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="{StaticResource TextPrimary}" />
-            <Label Text="Accesorios" 
-                   FontSize="28" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="{StaticResource TextPrimary}" 
-                   Margin="0,-8,0,0"/>
-        </VerticalStackLayout>
+    <ScrollView>
+        <!-- Rejilla Principal de la Pantalla General -->
+        <Grid Padding="25" RowSpacing="25" ColumnSpacing="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- CONTENIDO PRINCIPAL CON SCROLL -->
-        <ScrollView Grid.Row="1" Padding="20,10">
-            <VerticalStackLayout Spacing="20">
+            <!-- ========================================== -->
+            <!-- INDICADORES SUPERIORES (TARJETAS PASTEL)  -->
+            <!-- ========================================== -->
+            <FlexLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
                 
-                <!-- TARJETAS DE NAVEGACIÓN PRINCIPALES (2x2) -->
-                <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="15">
-                    
-                    <!-- INSUMOS -->
-                    <Border Grid.Row="0" Grid.Column="0"
-                            StrokeShape="RoundRectangle 20"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource InsumosBlue}"
-                            HeightRequest="140">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToInsumosCommand}" />
-                        </Border.GestureRecognizers>
-                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="INSUMOS" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center"/>
-                            <Label Text="Inventario y&#10;Alertas" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <!-- PRODUCTOS -->
-                    <Border Grid.Row="0" Grid.Column="1"
-                            StrokeShape="RoundRectangle 20"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource ProductosPink}"
-                            HeightRequest="140">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToProductosCommand}" />
-                        </Border.GestureRecognizers>
-                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="PRODUCTOS" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center"/>
-                            <Label Text="Catálogo y&#10;Stock" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <!-- VENTAS -->
-                    <Border Grid.Row="1" Grid.Column="0"
-                            StrokeShape="RoundRectangle 20"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource VentasOrange}"
-                            HeightRequest="140">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToVentasCommand}" />
-                        </Border.GestureRecognizers>
-                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="VENTAS" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center"/>
-                            <Label Text="Registra&#10;Pedidos" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <!-- RESUMEN -->
-                    <Border Grid.Row="1" Grid.Column="1"
-                            StrokeShape="RoundRectangle 20"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource ResumenPurple}"
-                            HeightRequest="140">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToResumenCommand}" />
-                        </Border.GestureRecognizers>
-                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="RESUMEN" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center"/>
-                            <Label Text="Reportes y&#10;Ganancias" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                </Grid>
-
-                <!-- ÚLTIMAS ALERTAS -->
-                <Border StrokeShape="RoundRectangle 20"
-                        StrokeThickness="0"
-                        BackgroundColor="{StaticResource CardBackground}"
-                        Padding="15">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Últimas Alertas" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource TextPrimary}"/>
-                        
-                        <HorizontalStackLayout Spacing="10">
-                            <!-- Alerta 1 -->
-                            <Border StrokeShape="RoundRectangle 15"
-                                    StrokeThickness="0"
-                                    BackgroundColor="{StaticResource AlertPillBg}"
-                                    Padding="10,5">
-                                <Label Text="Cordón Rosa (2m)" FontSize="12" TextColor="{StaticResource AlertPillText}"/>
+                <!-- Tarjeta 1: Items en Stock (Insumos) -->
+                <Border BackgroundColor="#D4E4F7" StrokeShape="RoundRectangle 12" Padding="15" WidthRequest="240" Margin="0,5">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="🧵 Items en Stock (insumos)" FontSize="13" FontAttributes="Bold" TextColor="#444444"/>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Grid.Column="0" x:Name="LblTotalInsumos" Text="0" FontSize="32" FontAttributes="Bold" VerticalOptions="Center" TextColor="#1F385C"/>
+                            <Border Grid.Column="1" BackgroundColor="#FCE4C8" StrokeShape="RoundRectangle 6" Padding="6,3" VerticalOptions="Center">
+                                <Label x:Name="LblAlertasContador" Text="0 Alertas" FontSize="11" TextColor="DarkRed" FontAttributes="Bold"/>
                             </Border>
-
-                            <!-- Alerta 2 -->
-                            <Border StrokeShape="RoundRectangle 15"
-                                    StrokeThickness="0"
-                                    BackgroundColor="{StaticResource AlertPillBg}"
-                                    Padding="10,5">
-                                <Label Text="Argollas Oro (10u)" FontSize="12" TextColor="{StaticResource AlertPillText}"/>
-                            </Border>
-                        </HorizontalStackLayout>
+                        </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-            </VerticalStackLayout>
-        </ScrollView>
+                <!-- Tarjeta 2: Productos para Venta -->
+                <Border BackgroundColor="#E2F0D9" StrokeShape="RoundRectangle 12" Padding="15" WidthRequest="240" Margin="0,5">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="🛍️ Productos para Venta" FontSize="13" FontAttributes="Bold" TextColor="#444444"/>
+                        <Grid ColumnDefinitions="*, *">
+                            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                                <Label x:Name="LblProductosCreados" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#2E4F1A"/>
+                                <Label Text="creados" FontSize="11" TextColor="#555555" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                <Label x:Name="LblPedidosActivos" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#2E4F1A"/>
+                                <Label Text="activos" FontSize="11" TextColor="#555555" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
 
-        <!-- BARRA INFERIOR DE NAVEGACIÓN -->
-        <Border Grid.Row="2" 
-                StrokeShape="RoundRectangle 0" 
-                StrokeThickness="0"
-                BackgroundColor="{StaticResource CardBackground}" 
-                Padding="10,5">
-            <Grid ColumnDefinitions="*, *, *, *, *">
-                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="2">
-                    <Label Text="Inicio" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="2">
-                    <Label Text="Insumos" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="2">
-                    <Label Text="Productos" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="2">
-                    <Label Text="Ventas" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="2">
-                    <Label Text="Perfil" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-            </Grid>
-        </Border>
+                <!-- Tarjeta 3: Ventas de Hoy -->
+                <Border BackgroundColor="#FCECE3" StrokeShape="RoundRectangle 12" Padding="15" WidthRequest="240" Margin="0,5">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="💰 Ventas de Hoy" FontSize="13" FontAttributes="Bold" TextColor="#444444"/>
+                        <Label x:Name="LblVentasHoy" Text="$0 MXN" FontSize="32" FontAttributes="Bold" TextColor="#C55A11"/>
+                    </VerticalStackLayout>
+                </Border>
+            </FlexLayout>
 
-    </Grid>
+            <!-- ========================================== -->
+            <!-- BLOQUE INFERIOR IZQUIERDO: RENDIMIENTO    -->
+            <!-- ========================================== -->
+            <Border Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 15" Padding="15">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="Mi Semana en Ventas" FontSize="16" FontAttributes="Bold" TextColor="#2D2D2D"/>
+                    <!-- Estructura del Gráfico de Rendimiento Semanal -->
+                    <Grid HeightRequest="180" ColumnDefinitions="*, *, *, *, *, *, *" VerticalOptions="End" Margin="0,10,0,0">
+                        <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="5">
+                            <Label Text="25" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="55" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Lu 25" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="5">
+                            <Label Text="32" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="75" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Ma 32" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" VerticalOptions="End" Spacing="5">
+                            <Label Text="41" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="100" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Me 41" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="3" VerticalOptions="End" Spacing="5">
+                            <Label Text="28" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="65" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Ju 28" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="4" VerticalOptions="End" Spacing="5">
+                            <Label Text="45" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="120" WidthRequest="20" Color="#FCE4C8" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="V 45" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="5" VerticalOptions="End" Spacing="5">
+                            <Label Text="35" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="85" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Sa 35" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="6" VerticalOptions="End" Spacing="5">
+                            <Label Text="30" FontAttributes="Bold" HorizontalOptions="Center" FontSize="12"/>
+                            <BoxView HeightRequest="70" WidthRequest="20" Color="#B3D1F2" HorizontalOptions="Center" CornerRadius="3"/>
+                            <Label Text="Su 30" FontSize="11" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+              <!-- ========================================== -->
+            <!-- BLOQUE INFERIOR DERECHO: BAJO STOCK       -->
+            <!-- ========================================== -->
+            <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 15" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Alertas de Insumos" FontSize="15" FontAttributes="Bold" TextColor="#A61C1C"/>
+                    
+                    <!-- Lista de Insumos con bajo stock mapeada desde SQLite -->
+                    <CollectionView x:Name="ListInsumosCriticos" HeightRequest="220">
+                        <CollectionView.EmptyView>
+                            <Label Text="✅ Todo el stock en niveles óptimos" FontSize="12" TextColor="Gray" HorizontalOptions="Center" Margin="0,20,0,0"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#FFF3EB" Padding="12,10" StrokeShape="RoundRectangle 8" Margin="0,4">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                            <Label Text="{Binding Nombre}" FontSize="13" FontAttributes="Bold" TextColor="#2D2D2D"/>
+                                            <Label Text="{Binding Stock, StringFormat='Quedan sólo: {0} unidades'}" FontSize="11" TextColor="#666666"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="⚠️" FontSize="16" VerticalOptions="Center" Margin="5,0,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
 
+        </Grid>
+    </ScrollView>
 </ContentPage>
+

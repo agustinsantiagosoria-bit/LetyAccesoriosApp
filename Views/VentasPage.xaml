@@ -2,49 +2,79 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LetyAccesoriosApp.Views.VentasPage"
-             Title="Resumen de Ventas">
+             BackgroundColor="#FFF3EB"
+             Title="Caja Registradora">
 
-    <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
+    <!-- Estructura dividida en dos columnas para el panel de caja (Foto 3) -->
+    <Grid ColumnDefinitions="*, 1.2*" Padding="20" ColumnSpacing="20">
+        
+        <!-- ELEMENTO 1: COLUMNA IZQUIERDA - HISTORIAL DE PEDIDOS / TICKETS -->
+        <VerticalStackLayout Grid.Column="0" Spacing="10">
+            <Label Text="Historial de Pedidos" FontSize="18" FontAttributes="Bold" TextColor="#2D2D2D"/>
+            
+            <CollectionView ItemsSource="{Binding HistorialVentas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Padding="15" Margin="0,5">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                    <!-- Identificador único del Ticket -->
+                                    <Label Text="{Binding Id, StringFormat='Orden #{0}'}" FontAttributes="Bold" FontSize="14" TextColor="#2D2D2D"/>
+                                    <Label Text="Cliente: Lety" FontSize="12" TextColor="Gray"/>
+                                    
+                                    <!-- Etiqueta de Estado de la Venta (Pagado/Despachado) -->
+                                    <Border BackgroundColor="#E2F0D9" HorizontalOptions="Start" Padding="6,2" StrokeShape="RoundRectangle 4">
+                                        <Label Text="Pagado, Despachado" FontSize="11" TextColor="DarkGreen" FontAttributes="Bold"/>
+                                    </Border>
+                                </VerticalStackLayout>
+                                
+                                <!-- Monto Total Recaudado -->
+                                <Label Grid.Column="1" Text="{Binding TotalGanado, StringFormat='${0} MXN'}" FontAttributes="Bold" VerticalOptions="Center" FontSize="16" TextColor="#C55A11"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <!-- ELEMENTO 2: COLUMNA DERECHA - RESUMEN MENSUAL Y ACCIÓN DIRECTA -->
+        <VerticalStackLayout Grid.Column="1" Spacing="15">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 15" Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Resumen Mensual (Junio)" FontSize="18" FontAttributes="Bold" TextColor="#2D2D2D"/>
+                    
+                    <!-- Fila de tres bloques de métricas (Foto 3) -->
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+                        <Border Grid.Column="0" BackgroundColor="#FFF3EB" Padding="10" StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="$4850" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#2D2D2D"/>
+                                <Label Text="Total MXN" FontSize="10" TextColor="Gray" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="#FFF3EB" Padding="10" StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="45" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#2D2D2D"/>
+                                <Label Text="Ventas Totales" FontSize="10" TextColor="Gray" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2" BackgroundColor="#FFF3EB" Padding="10" StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="$107 MXN" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#2D2D2D"/>
+                                <Label Text="Venta Promedio" FontSize="10" TextColor="Gray" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
 
-        <Grid Grid.Row="0" ColumnDefinitions="*, *, *" ColumnSpacing="8">
-            <Button Grid.Column="0" Text="Hoy" x:Name="BtnHoy" Clicked="OnFiltroHoyClicked" BackgroundColor="#2196F3" TextColor="White" />
-            <Button Grid.Column="1" Text="Semana" x:Name="BtnSemana" Clicked="OnFiltroSemanaClicked" BackgroundColor="#E0E0E0" TextColor="Black" />
-            <Button Grid.Column="2" Text="Mes" x:Name="BtnMes" Clicked="OnFiltroMesClicked" BackgroundColor="#E0E0E0" TextColor="Black" />
-        </Grid>
+                    <!-- Simulación de la mini-gráfica lineal de rendimiento semanal de la maqueta -->
+                    <Label Text="Medios de Pago" FontSize="12" FontAttributes="Bold" TextColor="#2D2D2D" Margin="0,10,0,0"/>
+                    <Grid HeightRequest="70" BackgroundColor="#FFF3EB" Padding="10">
+                        <BoxView HeightRequest="2" Color="#C55A11" VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
 
-        <Frame Grid.Row="1" BackgroundColor="#4CAF50" CornerRadius="12" Padding="20" HasShadow="True">
-            <StackLayout HorizontalOptions="Center" Spacing="5">
-                <Label Text="Total Ganado" TextColor="White" FontSize="14" HorizontalOptions="Center" />
-                <Label x:Name="TotalRecaudadoLabel" Text="$0.00" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" />
-            </StackLayout>
-        </Frame>
-
-        <CollectionView Grid.Row="2" x:Name="VentasCollectionView">
-            <CollectionView.EmptyView>
-                <Label Text="No hay ventas registradas en este período." HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
-            </CollectionView.EmptyView>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="0,4" Padding="12" CornerRadius="8" BorderColor="#E0E0E0">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <StackLayout Grid.Column="0">
-                                <Label Text="{Binding NombreProducto}" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="{Binding CantidadVendida, StringFormat='Unidades: {0}'}" FontSize="13" TextColor="Gray" />
-                                <Label Text="{Binding FechaVenta, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="11" TextColor="Gray" />
-                            </StackLayout>
-
-                            <Label Grid.Column="1" 
-                                   Text="{Binding TotalVenta, StringFormat='${0:F2}'}" 
-                                   FontSize="18" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#2E7D32" 
-                                   VerticalOptions="Center" />
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            <!-- Botón Grande de Acción de Registro (Naranja pastel de tu diseño) -->
+            <Button Text="+ Registrar Nueva Venta" BackgroundColor="#FCE4C8" TextColor="Black" FontAttributes="Bold" FontSize="16" HeightRequest="50"/>
+        </VerticalStackLayout>
 
     </Grid>
-
 </ContentPage>

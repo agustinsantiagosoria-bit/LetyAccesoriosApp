@@ -2,31 +2,56 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LetyAccesoriosApp.Views.ProductoFormPage"
-             BackgroundColor="#FFF8F6"
-             Title="Nuevo Producto">
+             BackgroundColor="#FFF3EB"
+             Title="Catálogo de Productos">
 
-    <ScrollView Padding="20">
-        <VerticalStackLayout Spacing="15">
-            <Label Text="Agregar Nuevo Producto" 
-                   FontSize="22" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="#333333" />
+    <!-- Estructura en rejilla para congelar los títulos y permitir scroll en los datos -->
+    <Grid RowDefinitions="Auto, Auto, *" Padding="20" RowSpacing="15">
 
-            <Entry x:Name="NombreEntry" Placeholder="Nombre del producto" />
-            <Entry x:Name="PrecioEntry" Placeholder="Precio" Keyboard="Numeric" />
-            <Entry x:Name="StockActualEntry" Placeholder="Stock inicial" Keyboard="Numeric" />
-            <Entry x:Name="StockMinimoEntry" Placeholder="Stock mínimo" Keyboard="Numeric" />
+        <!-- ELEMENTO 1: BARRA SUPERIOR DE BÚSQUEDA Y ACCIÓN DIRECTA (FOTO 2) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Center">
+            <Label Grid.Column="0" Text="Producción / Catálogo - Gestión 🌸" FontSize="20" FontAttributes="Bold" TextColor="#2D2D2D"/>
+            <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                <Entry Placeholder="🔍 Filtrar Productos..." WidthRequest="220" BackgroundColor="White"/>
+                <Button Text="+ Agregar Nuevo Producto" BackgroundColor="#FCE4C8" TextColor="Black" FontAttributes="Bold" Padding="15,0"/>
+            </HorizontalStackLayout>
+        </Grid>
 
-            <Button Text="Guardar Producto" 
-                    Clicked="OnGuardarClicked" 
-                    BackgroundColor="#F48FB1" 
-                    TextColor="White" 
-                    FontAttributes="Bold"
-                    CornerRadius="10"
-                    HeightRequest="48"
-                    Margin="0,10,0,0" />
-        </VerticalStackLayout>
-    </ScrollView>
-
+        <!-- ELEMENTO 2: TÍTULOS FIJOS DE LA TABLA ESTILO EXCEL -->
+        <Grid Grid.Row="1" BackgroundColor="#FCECE3" Padding="12,10" ColumnDefinitions="2.5*, *, *, *, Auto" Margin="0,5,0,0">
+            <Label Grid.Column="0" Text="Producto Name" FontAttributes="Bold" TextColor="#444444"/>
+            <Label Grid.Column="1" Text="Precio Prod. Cost" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#444444"/>
+            <Label Grid.Column="2" Text="Precio Venta Retail" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#444444"/>
+            <Label Grid.Column="3" Text="Stock Venta Finished" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#444444"/>
+            <Label Grid.Column="4" Text="Acciones" FontAttributes="Bold" WidthRequest="90" HorizontalOptions="Center" TextColor="#444444"/>
+        </Grid>
+        <!-- ELEMENTO 3: FILAS DINÁMICAS DE LA TABLA ESTILO EXCEL CONECTADAS A SQLITE -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Productos}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 0" Padding="12,10" Margin="0,1">
+                        <Grid ColumnDefinitions="2.5*, *, *, *, Auto">
+                            <!-- Nombre del Producto / Accesorio -->
+                            <Label Grid.Column="0" Text="{Binding Nombre}" VerticalOptions="Center" FontAttributes="Bold" TextColor="#2D2D2D"/>
+                            
+                            <!-- Costo de Producción (Calculado por la Receta) -->
+                            <Label Grid.Column="1" Text="{Binding CostoProduccion, StringFormat='${0:F2}'}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#2D2D2D"/>
+                            
+                            <!-- Precio de Venta Sugerido (Retail) -->
+                            <Label Grid.Column="2" Text="{Binding PrecioSugerido, StringFormat='${0:F2}'}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="DarkGreen" FontAttributes="Bold"/>
+                            
+                            <!-- Stock de Producto Terminado Listo para la Venta -->
+                            <Label Grid.Column="3" Text="20" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#2D2D2D"/>
+                            
+                            <!-- Botones Rápidos de Acción (Modificar / Eliminar) -->
+                            <HorizontalStackLayout Grid.Column="4" Spacing="6" WidthRequest="90" HorizontalOptions="Center">
+                                <Button Text="✏️" FontSize="12" WidthRequest="40" HeightRequest="32" Padding="0" BackgroundColor="#E2F0D9" TextColor="Black"/>
+                                <Button Text="🗑️" FontSize="12" WidthRequest="40" HeightRequest="32" Padding="0" BackgroundColor="#FCECE3" TextColor="DarkRed"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>
