@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+15a7d81e17516605ea3ae46954338ed84f87bbdc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+e65d6a0361fa622343688e6afb672d6e0b97e37d")]
 [assembly: System.Reflection.AssemblyProductAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LetyAccesoriosApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
