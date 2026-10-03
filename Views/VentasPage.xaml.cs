@@ -1,35 +1,77 @@
 using LetyAccesoriosApp.Data;
 using LetyAccesoriosApp.Models;
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LetyAccesoriosApp.Views
 {
     public partial class VentasPage : ContentPage
     {
         private readonly DatabaseService _databaseService;
+        private readonly List<DetalleVenta> _carritoActual = new();
 
-        // El constructor recibe el inyector de dependencias de la base de datos
-        public VentasPage(DatabaseService databaseService)
+        public VentasPage()
         {
             InitializeComponent();
-            _databaseService = databaseService;
+            _databaseService = IPlatformApplication.Current!.Services.GetRequiredService<DatabaseService>();
         }
-        // Recarga el historial de ventas automáticamente al entrar a la pantalla
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await CargarDatosPantallaAsync();
+        }
 
+        private async Task CargarDatosPantallaAsync()
+        {
             try
             {
-                // 1. Consultamos el historial de tickets registrados en SQLite
                 var listaVentas = await _databaseService.ObtenerHistorialVentasAsync();
+                var listaProductos = await _databaseService.ObtenerProductosAsync();
 
-                // 2. Vinculamos el resultado directamente con el listado XAML mediante un objeto anónimo
+                PickerProductosVenta.ItemsSource = listaProductos;
+                PickerProductosVenta.ItemDisplayBinding = new Binding("Nombre");
+                
                 BindingContext = new { HistorialVentas = listaVentas };
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[VENTAS ERROR]: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[BOX ERROR]: {ex.Message}");
+            }
+        }
+
+        private async void OnRegistrarVentaClicked(object sender, EventArgs e)
+        {
+            if (PickerProductosVenta.SelectedItem is ProductoVenta productoSelected && 
+                double.TryParse(TxtCantidadVenta.Text, out double cantidadUnidades))
+            {
+                try
+                {
+                    _carritoActual.Clear();
+                    _carritoActual.Add(new DetalleVenta
+                    {
+                        ProductoVentaId = productoSelected.Id,
+                        Cantidad = (int)cantidadUnidades,
+                        PrecioUnitarioVenta = productoSelected.PrecioVenta
+                    });
+
+                    await _databaseService.RegistrarVentaAsync(_carritoActual);
+                    
+                    TxtCantidadVenta.Text = string.Empty;
+                    PickerProductosVenta.SelectedItem = null;
+                    
+                    await DisplayAlert("🌸 Caja Actualizada", $"Se registró la venta de {productoSelected.Nombre}.", "Entendido");
+                    await CargarDatosPantallaAsync();
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", $"No se pudo completar la transacción: {ex.Message}", "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Atención", "Por favor selecciona un accesorio del catálogo e ingresa una cantidad válida.", "OK");
             }
         }
     }

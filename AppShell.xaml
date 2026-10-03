@@ -8,9 +8,23 @@
     Title="Lety Accesorios">
 
     <!-- Navegación directa y segura vinculando correctamente el prefijo views -->
-    <ShellContent
-        Title="Insumos"
-        ContentTemplate="{DataTemplate views:InsumosPage}"
-        Route="InsumosPage" />
+        <TabBar>
+        <!-- La primera pestaña es el Dashboard (Foto 1), por lo que la app arrancará aquí -->
+        <Tab Title="Resumen General">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
+        </Tab>
+        
+        <Tab Title="Inventario Insumos">
+            <ShellContent ContentTemplate="{DataTemplate views:InsumosPage}" Route="InsumosPage" />
+        </Tab>
+        
+        <Tab Title="Catálogo Productos">
+            <ShellContent ContentTemplate="{DataTemplate views:ProductoFormPage}" Route="ProductoFormPage" />
+        </Tab>
+        
+        <Tab Title="Caja Registradora">
+            <ShellContent ContentTemplate="{DataTemplate views:VentasPage}" Route="VentasPage" />
+        </Tab>
+    </TabBar>
 
 </Shell>

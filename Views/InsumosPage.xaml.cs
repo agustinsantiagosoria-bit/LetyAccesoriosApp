@@ -1,5 +1,6 @@
 using LetyAccesoriosApp.ViewModels;
 using LetyAccesoriosApp.Data;
+using System;
 
 namespace LetyAccesoriosApp.Views
 {
@@ -7,23 +8,28 @@ namespace LetyAccesoriosApp.Views
     {
         private readonly InsumosViewModel _viewModel;
 
-        // El constructor recibe el inyector de dependencias de la base de datos
         public InsumosPage(DatabaseService databaseService)
         {
             InitializeComponent();
             
-            // Instanciamos el intermediario de datos y lo asignamos a la vista
             _viewModel = new InsumosViewModel(databaseService);
             BindingContext = _viewModel;
         }
-        // Recarga los datos automáticamente al entrar a la pantalla
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             
             if (_viewModel != null)
             {
-                await _viewModel.CargarDatosAsync();
+                try
+                {
+                    await _viewModel.CargarDatosAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[INSUMOS LOAD ERROR]: {ex.Message}");
+                }
             }
         }
     }

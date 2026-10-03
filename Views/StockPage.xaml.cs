@@ -29,5 +29,6 @@ public partial class StockPage : ContentPage
     {
         // Le pasamos el servicio a la página del formulario correctamente
         await Navigation.PushAsync(new ProductoFormPage(_databaseService));
+
     }
 }
