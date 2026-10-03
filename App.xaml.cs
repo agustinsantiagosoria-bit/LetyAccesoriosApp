@@ -6,7 +6,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Inicialización limpia e independiente
-        MainPage = new NavigationPage();
+        // Establecemos el inicio nativo estándar usando el AppShell centralizado
+        MainPage = new AppShell();
     }
 }

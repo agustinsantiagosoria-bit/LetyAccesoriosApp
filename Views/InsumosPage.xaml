@@ -25,4 +25,5 @@
             <Button Text="Guardar Insumo" Command="{Binding GuardarInsumoCommand}" BackgroundColor="#B3D1F2" TextColor="Black"/>
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>
