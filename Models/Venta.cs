@@ -1,16 +1,21 @@
+using System;
 using SQLite;
 
-namespace LetyAccesoriosApp.Models;
-
-public class Venta
+namespace LetyAccesoriosApp.Models
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    public class Venta
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
 
-    public int ProductoId { get; set; }
-    public string NombreProducto { get; set; } = string.Empty;
-    public int CantidadVendida { get; set; }
-    public decimal PrecioUnitario { get; set; }
-    public decimal TotalVenta { get; set; }
-    public DateTime FechaVenta { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; }
+
+        public double TotalGastadoCosto { get; set; } // Lo que costó producir todo
+
+        public double TotalGanado { get; set; } // Lo que ingresó en caja
+
+        public double GananciaNeta { get; set; } // Margen real de ganancia
+
+        public bool Activa { get; set; } = true; // Permite cancelar la venta si es false
+    }
 }

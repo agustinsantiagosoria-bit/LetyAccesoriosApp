@@ -1,37 +1,35 @@
-namespace LetyAccesoriosApp.Views;
+using LetyAccesoriosApp.Data;
+using LetyAccesoriosApp.Models;
 
-public partial class ProductoFormPage : ContentPage
+namespace LetyAccesoriosApp.Views
 {
-    private readonly Data.DatabaseContext _database;
-
-    public ProductoFormPage()
+    public partial class ProductoFormPage : ContentPage
     {
-        InitializeComponent();
-        _database = new Data.DatabaseContext();
+        private readonly DatabaseService _databaseService;
+        private ProductoVenta _productoActual;
+
+        // El constructor ahora recibe el DatabaseService correcto
+        public ProductoFormPage(DatabaseService databaseService)
+        {
+            InitializeComponent();
+            _databaseService = databaseService;
+            _productoActual = new ProductoVenta();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            // Lógica para cargar insumos disponibles al abrir el formulario
+        }
+
+        private async void OnGuardarClicked(object sender, EventArgs e)
+        {
+            // Ejemplo de guardado integrado con el servicio nuevo
+            if (string.IsNullOrWhiteSpace(_productoActual.Nombre)) return;
+
+            var recetaVacia = new List<ProductoInsumo>();
+            await _databaseService.GuardarProductoConRecetaAsync(_productoActual, recetaVacia);
+            await Navigation.PopAsync();
+        }
     }
-
-    private async void OnGuardarClicked(object sender, EventArgs e)
-{
-    // Validar y parsear las entradas de texto
-    if (string.IsNullOrWhiteSpace(NombreEntry.Text) ||
-        !decimal.TryParse(PrecioEntry.Text, out decimal precio) ||
-        !int.TryParse(StockActualEntry.Text, out int stockActual) ||
-        !int.TryParse(StockMinimoEntry.Text, out int stockMinimo))
-    {
-        await DisplayAlert("Error", "Por favor completa todos los campos con valores numéricos válidos.", "OK");
-        return;
-    }
-
-    // Crear el objeto con la variable 'precio' ya convertida
-    var producto = new Models.Producto
-    {
-        Nombre = NombreEntry.Text,
-        Precio = precio, // <--- Debe recibir la variable decimal 'precio', no 'PrecioEntry.Text'
-        StockActual = stockActual,
-        StockMinimo = stockMinimo
-    };
-
-    await _database.SaveProductoAsync(producto);
-    await Shell.Current.GoToAsync("..");
-}
 }

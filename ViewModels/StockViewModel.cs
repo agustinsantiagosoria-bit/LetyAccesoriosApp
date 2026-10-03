@@ -2,17 +2,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LetyAccesoriosApp.Data;
+using LetyAccesoriosApp.Models; // <-- Añadido para reconocer ProductoVenta
 
 namespace LetyAccesoriosApp.ViewModels
 {
     public class StockViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseContext _databaseContext;
+        // Se cambió DatabaseContext por el nuevo DatabaseService centralizado
+        private readonly DatabaseService _databaseContext;
         private string _nombre = string.Empty;
         private int _cantidad;
         private bool _isBusy;
 
-        public ObservableCollection<ProductoModel> Productos { get; } = new ObservableCollection<ProductoModel>();
+        // Se actualizó la colección para usar el modelo correcto: ProductoVenta
+        public ObservableCollection<ProductoVenta> Productos { get; } = new ObservableCollection<ProductoVenta>();
 
         public string Nombre
         {
@@ -53,9 +56,10 @@ namespace LetyAccesoriosApp.ViewModels
             }
         }
 
-        public StockViewModel()
+        // Se modificó el constructor para recibir el servicio por Inyección de Dependencias
+        public StockViewModel(DatabaseService databaseService)
         {
-            _databaseContext = new DatabaseContext();
+            _databaseContext = databaseService;
             _nombre = string.Empty;
             _cantidad = 0;
         }
@@ -70,7 +74,8 @@ namespace LetyAccesoriosApp.ViewModels
                 IsBusy = true;
                 Productos.Clear();
 
-                var listaProductos = await _databaseContext.GetProductosAsync();
+                // Se actualizó al método oficial de obtención de productos
+                var listaProductos = await _databaseContext.ObtenerProductosAsync();
                 foreach (var producto in listaProductos)
                 {
                     Productos.Add(producto);

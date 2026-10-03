@@ -1,32 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
-using LetyAccesoriosApp.Data;
-using LetyAccesoriosApp.ViewModels;
+﻿using LetyAccesoriosApp.Data; // Añade este using arriba
+using LetyAccesoriosApp; // Añade este using arriba
+using LetyAccesoriosApp.Views; // Añade este using arriba
 
-namespace LetyAccesoriosApp
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold", "OpenSansSemibold");
+            });
 
-            // Registro de Servicios y ViewModels
-            builder.Services.AddSingleton<DatabaseContext>();
-            builder.Services.AddSingleton<MainPageViewModel>();
-            builder.Services.AddSingleton<StockViewModel>();
+        // ====== AGREGA ESTA LÍNEA AQUÍ ======
+        builder.Services.AddSingleton<DatabaseService>();
+        builder.Services.AddTransient<InsumosPage>();
+        builder.Services.AddTransient<ProductoFormPage>();
+        builder.Services.AddTransient<VentasPage>();
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
-
-            return builder.Build();
-        }
-    }
+        return builder.Build();
+    }   
 }

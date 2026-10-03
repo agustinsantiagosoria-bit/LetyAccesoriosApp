@@ -1,71 +1,34 @@
 using LetyAccesoriosApp.Data;
 using LetyAccesoriosApp.Models;
 
-namespace LetyAccesoriosApp.Views;
-
-public partial class VentasPage : ContentPage
+namespace LetyAccesoriosApp.Views
 {
-    private readonly DatabaseContext _database;
-
-    public VentasPage()
+    public partial class VentasPage : ContentPage
     {
-        InitializeComponent();
-        _database = new DatabaseContext();
-    }
+        private readonly DatabaseService _databaseService;
 
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await CargarVentasHoyAsync();
-    }
+        // Constructor corregido con el tipo DatabaseService
+        public VentasPage(DatabaseService databaseService)
+        {
+            InitializeComponent();
+            _databaseService = databaseService;
+        }
 
-    private async Task CargarVentasPorRangoAsync(DateTime inicio, DateTime fin)
-    {
-        var ventas = await _database.GetVentasByFechaAsync(inicio, fin);
-        VentasCollectionView.ItemsSource = ventas;
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            // Actualiza la lista de ventas cargadas en la interfaz de usuario
+            var historial = await _databaseService.ObtenerHistorialVentasAsync();
+            // HistorialCollectionView.ItemsSource = historial; // Descomenta si usas este control en tu XAML
+        }
 
-        decimal total = ventas.Sum(v => v.TotalVenta);
-        TotalRecaudadoLabel.Text = $"${total:N2}";
-    }
-
-    private async void OnFiltroHoyClicked(object sender, EventArgs e)
-    {
-        ActualizarEstiloBotones(BtnHoy, BtnSemana, BtnMes);
-        await CargarVentasHoyAsync();
-    }
-
-    private async Task CargarVentasHoyAsync()
-    {
-        var hoyInicio = DateTime.Today;
-        var hoyFin = DateTime.Today.AddDays(1).AddTicks(-1);
-        await CargarVentasPorRangoAsync(hoyInicio, hoyFin);
-    }
-
-    private async void OnFiltroSemanaClicked(object sender, EventArgs e)
-    {
-        ActualizarEstiloBotones(BtnSemana, BtnHoy, BtnMes);
-        var inicioSemana = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
-        var finSemana = DateTime.Today.AddDays(1).AddTicks(-1);
-        await CargarVentasPorRangoAsync(inicioSemana, finSemana);
-    }
-
-    private async void OnFiltroMesClicked(object sender, EventArgs e)
-    {
-        ActualizarEstiloBotones(BtnMes, BtnHoy, BtnSemana);
-        var inicioMes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-        var finMes = DateTime.Today.AddDays(1).AddTicks(-1);
-        await CargarVentasPorRangoAsync(inicioMes, finMes);
-    }
-
-    private void ActualizarEstiloBotones(Button activo, Button inactivo1, Button inactivo2)
-    {
-        activo.BackgroundColor = Color.FromArgb("#2196F3");
-        activo.TextColor = Colors.White;
-
-        inactivo1.BackgroundColor = Color.FromArgb("#E0E0E0");
-        inactivo1.TextColor = Colors.Black;
-
-        inactivo2.BackgroundColor = Color.FromArgb("#E0E0E0");
-        inactivo2.TextColor = Colors.Black;
+        private async void OnCancelarVentaClicked(object sender, EventArgs e)
+        {
+            if (sender is Button boton && boton.CommandParameter is int ventaId)
+            {
+                await _databaseService.CancelarVentaAsync(ventaId);
+                OnAppearing(); // Refresca la UI al anular
+            }
+        }
     }
 }

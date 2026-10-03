@@ -1,181 +1,208 @@
 using SQLite;
 using LetyAccesoriosApp.Models;
+using System.IO;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace LetyAccesoriosApp.Data
 {
-    // Modelos de datos para SQLite
-    [Table("Insumos")]
-    public class InsumoModel
+    public class DatabaseService
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public int Cantidad { get; set; }
-        public int StockMinimo { get; set; }
-        public string Unidad { get; set; } = string.Empty;
-    }
+        private SQLiteAsyncConnection _database;
 
-    [Table("Productos")]
-    public class ProductoModel
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public decimal Precio { get; set; }
-        public int Stock { get; set; }
-        public int StockActual { get; set; }
-        public int StockMinimo { get; set; }
-        public string Categoria { get; set; } = string.Empty;
-    }
-
-    [Table("Ventas")]
-    public class VentaModel
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public DateTime Fecha { get; set; } = DateTime.Now;
-
-        private decimal _total;
-        public decimal Total
+        public DatabaseService()
         {
-            get => _total;
-            set
-            {
-                _total = value;
-                _totalVenta = value;
-            }
         }
 
-        private decimal _totalVenta;
-        public decimal TotalVenta
-        {
-            get => _totalVenta != 0 ? _totalVenta : _total;
-            set
-            {
-                _totalVenta = value;
-                _total = value;
-            }
-        }
-
-        public string Detalle { get; set; } = string.Empty;
-    }
-
-    public class DatabaseContext
-    {
-        private SQLiteAsyncConnection? _database;
-
-        private async Task InitAsync()
+        private async Task Init()
         {
             if (_database != null)
                 return;
 
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "lety_accesorios.db3");
+            // Define una ruta multiplataforma segura para guardar la base de datos
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "LetyAccesoriosDB.db3");
+            
             _database = new SQLiteAsyncConnection(dbPath);
 
-            await _database.CreateTableAsync<InsumoModel>();
-            await _database.CreateTableAsync<ProductoModel>();
-            await _database.CreateTableAsync<VentaModel>();
-            await _database.CreateTableAsync<Producto>();
+            // Creamos todas las tablas necesarias de forma automática
+            await _database.CreateTableAsync<Sucursal>();
+            await _database.CreateTableAsync<Insumo>();
+            await _database.CreateTableAsync<ProductoVenta>();
+            await _database.CreateTableAsync<ProductoInsumo>();
+            await _database.CreateTableAsync<Venta>();
+            await _database.CreateTableAsync<DetalleVenta>();
         }
 
-        public async Task<SQLiteAsyncConnection> GetConnectionAsync()
-        {
-            await InitAsync();
-            return _database!;
-        }
+        // ==========================================
+        // MÓDULO 1: APARTADO DE INSUMOS Y SUCURSALES
+        // ==========================================
 
-        // --- MÉTODOS PARA PRODUCTOS ---
-        public async Task<List<ProductoModel>> GetProductosAsync()
+        public async Task<int> GuardarSucursalAsync(Sucursal sucursal)
         {
-            await InitAsync();
-            return await _database!.Table<ProductoModel>().ToListAsync();
-        }
-
-        public async Task<int> SaveProductoAsync(ProductoModel producto)
-        {
-            await InitAsync();
-            if (producto.Id != 0)
-            {
-                return await _database!.UpdateAsync(producto);
-            }
+            await Init();
+            if (sucursal.Id != 0)
+                return await _database.UpdateAsync(sucursal);
             else
-            {
-                return await _database!.InsertAsync(producto);
-            }
+                return await _database.InsertAsync(sucursal);
         }
 
-        public async Task<int> SaveProductoAsync(Producto producto)
+        public async Task<List<Sucursal>> ObtenerSucursalesAsync()
         {
-            await InitAsync();
-            if (producto.Id != 0)
-            {
-                return await _database!.UpdateAsync(producto);
-            }
-            else
-            {
-                return await _database!.InsertAsync(producto);
-            }
+            await Init();
+            return await _database.Table<Sucursal>().ToListAsync();
         }
 
-        public async Task<int> DeleteProductoAsync(ProductoModel producto)
+        public async Task<int> GuardarInsumoAsync(Insumo insumo)
         {
-            await InitAsync();
-            return await _database!.DeleteAsync(producto);
-        }
-
-        public async Task<int> DeleteProductoAsync(Producto producto)
-        {
-            await InitAsync();
-            return await _database!.DeleteAsync(producto);
-        }
-
-        // --- MÉTODOS PARA VENTAS ---
-        public async Task<List<VentaModel>> GetVentasByFechaAsync(DateTime fecha)
-        {
-            await InitAsync();
-            DateTime inicioDia = fecha.Date;
-            DateTime finDia = fecha.Date.AddDays(1).AddTicks(-1);
-
-            return await _database!.Table<VentaModel>()
-                .Where(v => v.Fecha >= inicioDia && v.Fecha <= finDia)
-                .ToListAsync();
-        }
-
-        public async Task<List<VentaModel>> GetVentasByFechaAsync(DateTime desde, DateTime hasta)
-        {
-            await InitAsync();
-            DateTime inicio = desde.Date;
-            DateTime fin = hasta.Date.AddDays(1).AddTicks(-1);
-
-            return await _database!.Table<VentaModel>()
-                .Where(v => v.Fecha >= inicio && v.Fecha <= fin)
-                .ToListAsync();
-        }
-
-        public async Task<int> SaveVentaAsync(VentaModel venta)
-        {
-            await InitAsync();
-            return await _database!.InsertAsync(venta);
-        }
-
-        // --- MÉTODOS PARA INSUMOS ---
-        public async Task<List<InsumoModel>> GetInsumosAsync()
-        {
-            await InitAsync();
-            return await _database!.Table<InsumoModel>().ToListAsync();
-        }
-
-        public async Task<int> SaveInsumoAsync(InsumoModel insumo)
-        {
-            await InitAsync();
+            await Init();
             if (insumo.Id != 0)
-            {
-                return await _database!.UpdateAsync(insumo);
-            }
+                return await _database.UpdateAsync(insumo);
             else
+                return await _database.InsertAsync(insumo);
+        }
+
+        public async Task<List<Insumo>> ObtenerInsumosAsync()
+        {
+            await Init();
+            var insumos = await _database.Table<Insumo>().ToListAsync();
+            var sucursales = await ObtenerSucursalesAsync();
+
+            // Mapeamos el nombre de la sucursal de forma manual para evitar joins pesados
+            foreach (var insumo in insumos)
             {
-                return await _database!.InsertAsync(insumo);
+                var suc = sucursales.Find(s => s.Id == insumo.SucursalId);
+                insumo.NombreSucursal = suc != null ? suc.Nombre : "Desconocida";
             }
+            return insumos;
+        }
+
+        // ==========================================
+        // MÓDULO 2: ARMADO DE PRODUCCIONES Y COSTOS
+        // ==========================================
+
+        public async Task GuardarProductoConRecetaAsync(ProductoVenta producto, List<ProductoInsumo> receta)
+        {
+            await Init();
+            
+            // Usamos una transacción para asegurarnos de que se guarde todo o nada
+            await _database.RunInTransactionAsync(tran =>
+            {
+                if (producto.Id != 0)
+                {
+                    tran.Update(producto);
+                    // Borramos la receta anterior para reescribirla de cero si se modificó
+                    var viejosInsumos = tran.Table<ProductoInsumo>().Where(pi => pi.ProductoVentaId == producto.Id).ToList();
+                    foreach (var vi in viejosInsumos) tran.Delete(vi);
+                }
+                else
+                {
+                    tran.Insert(producto); // Inserta y asigna el Id automáticamente
+                }
+
+                foreach (var item in receta)
+                {
+                    item.ProductoVentaId = producto.Id;
+                    tran.Insert(item);
+                }
+            });
+        }
+
+        public async Task<List<ProductoVenta>> ObtenerProductosAsync()
+        {
+            await Init();
+            return await _database.Table<ProductoVenta>().ToListAsync();
+        }
+
+        public async Task<List<ProductoInsumo>> ObtenerRecetaDeProductoAsync(int productoId)
+        {
+            await Init();
+            return await _database.Table<ProductoInsumo>().Where(pi => pi.ProductoVentaId == productoId).ToListAsync();
+        }
+
+        // ==========================================
+        // MÓDULO 3: REGISTRO Y CANCELACIÓN DE VENTAS
+        // ==========================================
+
+        public async Task RegistrarVentaAsync(List<DetalleVenta> carrito)
+        {
+            await Init();
+
+            double totalCosto = 0;
+            double totalVenta = 0;
+
+            // Calculamos totales y descontamos stock de insumos por cada producto vendido
+            foreach (var item in carrito)
+            {
+                var prod = await _database.Table<ProductoVenta>().Where(p => p.Id == item.ProductoVentaId).FirstOrDefaultAsync();
+                if (prod != null)
+                {
+                    totalCosto += (prod.CostoProduccion * item.Cantidad);
+                    totalVenta += (item.PrecioUnitarioVenta * item.Cantidad);
+
+                    // Descontar los insumos del stock real
+                    var receta = await ObtenerRecetaDeProductoAsync(prod.Id);
+                    foreach (var recetaItem in receta)
+                    {
+                        var insumo = await _database.Table<Insumo>().Where(i => i.Id == recetaItem.InsumoId).FirstOrDefaultAsync();
+                        if (insumo != null)
+                        {
+                            insumo.Stock -= (recetaItem.CantidadUtilizada * item.Cantidad);
+                            await _database.UpdateAsync(insumo);
+                        }
+                    }
+                }
+            }
+
+            Venta nuevaVenta = new Venta
+            {
+                Fecha = DateTime.Now,
+                TotalGastadoCosto = totalCosto,
+                TotalGanado = totalVenta,
+                GananciaNeta = totalVenta - totalCosto,
+                Activa = true
+            };
+
+            await _database.InsertAsync(nuevaVenta);
+
+            foreach (var item in carrito)
+            {
+                item.VentaId = nuevaVenta.Id;
+                await _database.InsertAsync(item);
+            }
+        }
+
+        public async Task CancelarVentaAsync(int ventaId)
+        {
+            await Init();
+            var venta = await _database.Table<Venta>().Where(v => v.Id == ventaId).FirstOrDefaultAsync();
+            
+            if (venta != null && venta.Activa)
+            {
+                venta.Activa = false;
+                await _database.UpdateAsync(venta);
+
+                // Devolvemos los insumos al stock original
+                var detalles = await _database.Table<DetalleVenta>().Where(dv => dv.VentaId == ventaId).ToListAsync();
+                foreach (var detalle in detalles)
+                {
+                    var receta = await ObtenerRecetaDeProductoAsync(detalle.ProductoVentaId);
+                    foreach (var recetaItem in receta)
+                    {
+                        var insumo = await _database.Table<Insumo>().Where(i => i.Id == recetaItem.InsumoId).FirstOrDefaultAsync();
+                        if (insumo != null)
+                        {
+                            insumo.Stock += (recetaItem.CantidadUtilizada * detalle.Cantidad);
+                            await _database.UpdateAsync(insumo);
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<List<Venta>> ObtenerHistorialVentasAsync()
+        {
+            await Init();
+            return await _database.Table<Venta>().OrderByDescending(v => v.Fecha).ToListAsync();
         }
     }
 }
